@@ -1,12 +1,16 @@
 import { Text, View, TouchableOpacity, Image, FlatList } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
 import ScreenWrapper from '../../components/ScreenWrapper'
 import styles from './styles'
 import randomImage from '../../helpers/randomImage'
 import { banner } from '../../helpers/assetImage'
-import { homeData } from '../../data/homeData'
+import { homeData } from '../../data'
+import EmptyList from '../../components/EmptyList'
 
 const HomeScreen = () => {
+    const navigation = useNavigation()
+
     return (
         <ScreenWrapper style={styles.container}>
             <View style={styles.row}>
@@ -20,7 +24,7 @@ const HomeScreen = () => {
             </View>
             <View style={styles.row}>
                 <Text style={styles.title}>Recent Trips</Text>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity onPress={() => navigation.navigate('AddTrip')} style={styles.btn}>
                     <Text style={styles.text}>Add Trip</Text>
                 </TouchableOpacity>
             </View>
@@ -30,12 +34,13 @@ const HomeScreen = () => {
                     numColumns={2}
                     keyExtractor={item => item.id}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={<EmptyList message="You haven't recorded any trips yet" />}
                     columnWrapperStyle={{
                         justifyContent: 'space-between'
                     }}
                     renderItem={({ item }) => {
                         return (
-                            <TouchableOpacity style={styles.itemWrapper}>
+                            <TouchableOpacity onPress={() => navigation.navigate('TripExpenses', { ...item })} style={styles.itemWrapper}>
                                 <View>
                                     <Image style={styles.itemImg} source={randomImage()} />
                                     <Text style={styles.itemTitle}>{item.place}</Text>

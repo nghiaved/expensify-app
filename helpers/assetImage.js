@@ -14,3 +14,6 @@ export const randomImages = {
 }
 
 export const banner = require('../assets/images/banner.png')
+export const empty = require('../assets/images/empty.png')
+export const addTrip = require('../assets/images/addTrip.png')
+export const addExpense = require('../assets/images/addExpense.png')
