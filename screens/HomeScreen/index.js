@@ -7,15 +7,21 @@ import randomImage from '../../helpers/randomImage'
 import { banner } from '../../helpers/assetImage'
 import { homeData } from '../../data'
 import EmptyList from '../../components/EmptyList'
+import { signOut } from 'firebase/auth'
+import { auth } from '../../config/firebase'
 
 const HomeScreen = () => {
     const navigation = useNavigation()
+
+    const handleLogOut = async () => {
+        await signOut(auth)
+    }
 
     return (
         <ScreenWrapper style={styles.container}>
             <View style={styles.row}>
                 <Text style={styles.name}>Expensify</Text>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity onPress={handleLogOut} style={styles.btn}>
                     <Text style={styles.text}>Logout</Text>
                 </TouchableOpacity>
             </View>

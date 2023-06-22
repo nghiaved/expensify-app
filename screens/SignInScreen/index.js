@@ -5,19 +5,35 @@ import ScreenWrapper from '../../components/ScreenWrapper'
 import BackButton from '../../components/BackButton'
 import styles from './styles'
 import { signIn } from '../../helpers/assetImage'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../../config/firebase'
+import { useDispatch, useSelector } from 'react-redux'
+import Loading from '../../components/Loading'
+import { setUserLoading } from '../../redux/slices/user'
 
 const SignInScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const { userLoading } = useSelector(state => state.user)
 
     const navigation = useNavigation()
 
-    const handleSubmit = () => {
-        if (email && password) {
-            navigation.goBack()
-            navigation.navigate('Home')
-        } else {
+    const dispatch = useDispatch()
 
+    const handleSubmit = async () => {
+        if (email && password) {
+            // navigation.goBack()
+            // navigation.navigate('Home')
+            try {
+                dispatch(setUserLoading(true))
+                await signInWithEmailAndPassword(auth, email, password)
+                dispatch(setUserLoading(false))
+            } catch (error) {
+                dispatch(setUserLoading(false))
+                console.log(error);
+            }
+        } else {
+            console.log('Empty inputs');
         }
     }
 
@@ -39,9 +55,13 @@ const SignInScreen = () => {
                     <Text>Forget Password?</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={handleSubmit} style={styles.btn}>
-                <Text style={styles.btnText}>Sign In</Text>
-            </TouchableOpacity>
+            {userLoading ?
+                <Loading /> :
+                <TouchableOpacity onPress={handleSubmit} style={styles.btn}>
+                    <Text style={styles.btnText}>Sign In</Text>
+                </TouchableOpacity>
+            }
+
         </ScreenWrapper>
     )
 }
