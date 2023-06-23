@@ -6,19 +6,39 @@ import BackButton from '../../components/BackButton'
 import styles from './styles'
 import { addExpense } from '../../helpers/assetImage'
 import { categoriesData } from '../../data'
+import { addDoc } from 'firebase/firestore'
+import { expensesRef } from '../../config/firebase'
+import Loading from '../../components/Loading'
 
-const AddExpenseScreen = () => {
+const AddExpenseScreen = (props) => {
     const [title, setTitle] = useState('')
     const [amount, setAmount] = useState('')
     const [category, setCategory] = useState('')
+    const [loading, setLoading] = useState(false)
+    const { id } = props.route.params
 
     const navigation = useNavigation()
 
-    const handleAddExpense = () => {
+    const handleAddExpense = async () => {
         if (title && amount && category) {
-            navigation.goBack()
+            try {
+                setLoading(true)
+                let doc = await addDoc(expensesRef, {
+                    title,
+                    amount,
+                    category,
+                    tripId: id
+                })
+                setLoading(false)
+                if (doc && doc.id) {
+                    navigation.goBack()
+                }
+            } catch (error) {
+                setLoading(false)
+                console.log(error);
+            }
         } else {
-
+            console.log('Empty inputs');
         }
     }
 
@@ -52,9 +72,12 @@ const AddExpenseScreen = () => {
                     })}
                 </View>
             </View>
-            <TouchableOpacity onPress={handleAddExpense} style={styles.btn}>
-                <Text style={styles.btnText}>Add Expense</Text>
-            </TouchableOpacity>
+            {loading ?
+                <Loading /> :
+                <TouchableOpacity onPress={handleAddExpense} style={styles.btn}>
+                    <Text style={styles.btnText}>Add Expense</Text>
+                </TouchableOpacity>
+            }
         </ScreenWrapper>
     )
 }

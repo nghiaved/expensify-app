@@ -1,6 +1,6 @@
 import { Text, View, Image, TouchableOpacity, FlatList } from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import ScreenWrapper from '../../components/ScreenWrapper'
 import BackButton from '../../components/BackButton'
 import styles from './styles'
@@ -8,11 +8,31 @@ import { banner } from '../../helpers/assetImage'
 import { expenseData } from '../../data'
 import EmptyList from '../../components/EmptyList'
 import ExpenseCard from '../../components/ExpenseCard'
+import { expensesRef } from '../../config/firebase'
+import { getDocs, query, where } from 'firebase/firestore'
 
 const TripExpensesScreen = (props) => {
     const { id, place, country } = props.route.params
 
     const navigation = useNavigation()
+    const [expenses, setExpenses] = useState([])
+
+    const isFocused = useIsFocused()
+
+    const fetchExpenses = async () => {
+        const q = query(expensesRef, where('tripId', '==', id))
+        const querySnapshot = await getDocs(q)
+        let data = []
+        querySnapshot.forEach(doc => {
+            data.push({ ...doc.data(), id: doc.id })
+        })
+        setExpenses(data);
+    }
+
+    useEffect(() => {
+        if (isFocused)
+            fetchExpenses()
+    }, [isFocused])
 
     return (
         <ScreenWrapper style={styles.container}>
@@ -27,13 +47,13 @@ const TripExpensesScreen = (props) => {
             </View>
             <View style={styles.row}>
                 <Text style={styles.title}>Expenses</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('AddExpense')} style={styles.btn}>
+                <TouchableOpacity onPress={() => navigation.navigate('AddExpense', { id, place, country })} style={styles.btn}>
                     <Text style={styles.text}>Add Expense</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.list}>
                 <FlatList
-                    data={expenseData}
+                    data={expenses}
                     keyExtractor={item => item.id}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={<EmptyList message="You haven't recorded any expense yet" />}
