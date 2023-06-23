@@ -15,9 +15,11 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontWeight: 700,
         fontSize: 24,
+        textAlign: 'center'
     },
     headerSubTitle: {
         fontSize: 16,
+        textAlign: 'center'
     },
     imgWrapper: {
         alignItems: 'center',

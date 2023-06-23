@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     itemWrapper: {
-        flex: 1,
+        flex: 0.5,
         backgroundColor: '#fff',
         justifyContent: 'center',
         alignItems: 'center',

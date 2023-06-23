@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
+import { Text, View, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import ScreenWrapper from '../../components/ScreenWrapper'
@@ -39,7 +39,7 @@ const SignInScreen = () => {
 
     return (
         <ScreenWrapper style={styles.container}>
-            <View style={styles.content}>
+            <ScrollView style={styles.content}>
                 <View style={styles.header}>
                     <BackButton />
                     <Text style={styles.headerTitle}>Sign In</Text>
@@ -51,10 +51,10 @@ const SignInScreen = () => {
                 <TextInput value={email} onChangeText={text => setEmail(text)} style={styles.input} />
                 <Text style={styles.name}>Password</Text>
                 <TextInput value={password} secureTextEntry onChangeText={text => setPassword(text)} style={styles.input} />
-                <TouchableOpacity style={styles.forget}>
-                    <Text>Forget Password?</Text>
+                <TouchableOpacity>
+                    <Text style={styles.forget}>Forget Password?</Text>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
             {userLoading ?
                 <Loading /> :
                 <TouchableOpacity onPress={handleSubmit} style={styles.btn}>

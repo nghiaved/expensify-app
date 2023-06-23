@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
+import { Text, View, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import ScreenWrapper from '../../components/ScreenWrapper'
@@ -44,7 +44,7 @@ const AddExpenseScreen = (props) => {
 
     return (
         <ScreenWrapper style={styles.container}>
-            <View style={styles.content}>
+            <ScrollView style={styles.content}>
                 <View style={styles.header}>
                     <BackButton />
                     <Text style={styles.headerTitle}>Add Expense</Text>
@@ -71,7 +71,7 @@ const AddExpenseScreen = (props) => {
                         )
                     })}
                 </View>
-            </View>
+            </ScrollView>
             {loading ?
                 <Loading /> :
                 <TouchableOpacity onPress={handleAddExpense} style={styles.btn}>

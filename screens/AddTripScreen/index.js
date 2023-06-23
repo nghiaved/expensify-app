@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
+import { Text, View, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import ScreenWrapper from '../../components/ScreenWrapper'
@@ -42,7 +42,7 @@ const AddTripScreen = () => {
 
     return (
         <ScreenWrapper style={styles.container}>
-            <View style={styles.content}>
+            <ScrollView style={styles.content}>
                 <View style={styles.header}>
                     <BackButton />
                     <Text style={styles.headerTitle}>Add Trip</Text>
@@ -54,7 +54,7 @@ const AddTripScreen = () => {
                 <TextInput value={place} onChangeText={text => setPlace(text)} style={styles.input} />
                 <Text style={styles.name}>Which Country?</Text>
                 <TextInput value={country} onChangeText={text => setCountry(text)} style={styles.input} />
-            </View>
+            </ScrollView>
             {loading ?
                 <Loading /> :
                 <TouchableOpacity onPress={handleAddTrip} style={styles.btn}>
